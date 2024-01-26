@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testing HTML Web</title>
+
+    <!-- Link to your external CSS file -->
+    <link rel="stylesheet" type="text/css" href="Chart.css">
+
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<!-- Input and Button Section -->
+<div class="input-section">
+    <label for="accountNumber">Enter Account Number:</label>
+    <input type="text" id="accountNumber" placeholder="Account Number">
+    <button onclick="fetchTestData()">Get Test Data</button>
+</div>
+
+<!-- Chart Area -->
+<div id="chartArea" class="chart-area">
+    <!-- Chart content will be dynamically added here -->
+</div>
+
+<script>
+    // // JavaScript function to fetch test data from a local JSON file
+    // function fetchTestData() {
+    //     // Example: Local file URL (replace with your actual JSON file name)
+    //     var jsonFile = 'test-data.json';
+
+    //     // Make a request to fetch the local JSON file
+    //     fetch(jsonFile)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             // Call a function to render the chart using the test data
+    //             renderChart(data);
+    //         })
+    //         .catch(error => {
+    //             console.error('Error fetching test data:', error);
+    //         });
+    // }
+
+    function fetchTestData() {
+    var serverUrl = 'http://localhost:8080';  // Use the correct URL from http-server output
+    var jsonFile = serverUrl + '/test-data.json';
+
+    fetch(jsonFile)
+        .then(response => response.json())
+        .then(data => {
+            renderChart(data);
+        })
+        .catch(error => {
+            console.error('Error fetching test data:', error);
+        });
+}
+
+    // JavaScript function to render the chart using the fetched test data
+    function renderChart(data) {
+        // Get the chart area element
+        var chartArea = document.getElementById("chartArea");
+
+        // Clear previous chart content
+        chartArea.innerHTML = "";
+
+        // Create a chart using Chart.js library (replace with your actual chart library or implementation)
+        var canvas = document.createElement("canvas");
+        chartArea.appendChild(canvas);
+        var ctx = canvas.getContext("2d");
+
+        var chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.dates,
+                datasets: [{
+                    label: 'Test Data',
+                    data: data.values,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    fill: false
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'day'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+
+</body>
+</html>
